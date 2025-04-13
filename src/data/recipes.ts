@@ -101,7 +101,7 @@ export const recipes: Recipe[] = [
       ]
     },
     instructions: "1. Spiralize zucchini into noodles\n2. Blend avocado, pine nuts, basil, lemon juice, and olive oil for pesto\n3. Combine and serve fresh",
-    image: "zucchini-pesto.jpg"
+    image: "/images/1.png"
   },
   {
     id: 2,
@@ -187,7 +187,7 @@ export const recipes: Recipe[] = [
       ]
     },
     instructions: "1. Cook quinoa with water or broth until fluffy\n2. Prepare fresh vegetables and avocado\n3. Make tahini dressing\n4. Assemble bowl with quinoa base, veggies, and dressing",
-    image: "buddha-bowl.jpg"
+    image: "/images/2.png"
   },
   {
     id: 3,
@@ -295,7 +295,7 @@ export const recipes: Recipe[] = [
       ]
     },
     instructions: "1. Cook rice and set aside\n2. Prepare chicken and vegetables\n3. Stir-fry vegetables and set aside\n4. Cook chicken until done\n5. Combine everything with sauce\n6. Serve over rice with optional garnishes",
-    image: "chicken-stir-fry.jpg"
+    image: "/images/3.png"
   },
   {
     id: 4,
@@ -384,7 +384,7 @@ export const recipes: Recipe[] = [
       ]
     },
     instructions: "1. Boil and mash potatoes with olive oil\n2. Season salmon with dill and lemon\n3. Bake salmon at 375°F for 15-20 minutes\n4. Serve salmon over mashed potatoes with optional garnishes",
-    image: "salmon-mashed.jpg"
+    image: "/images/4.png"
   },
   {
     id: 5,
@@ -492,7 +492,7 @@ export const recipes: Recipe[] = [
       ]
     },
     instructions: "1. Cook rice and set aside\n2. Rinse and cook lentils until tender\n3. Sauté onion and garlic\n4. Build curry with lentils, coconut milk, and spices\n5. Add spinach and simmer\n6. Serve over rice with optional garnishes",
-    image: "lentil-curry.jpg"
+    image: "/images/5.png"
   },
   {
     id: 6,
@@ -578,7 +578,7 @@ export const recipes: Recipe[] = [
       ]
     },
     instructions: "1. Mash bananas until smooth\n2. Whisk in eggs until frothy\n3. Stir in flour (almond or oat) and baking powder\n4. Cook pancakes on a hot griddle\n5. Top with berries and maple syrup",
-    image: "banana-pancakes.jpg"
+    image: "/images/6.png"
   },
   {
     id: 7,
@@ -660,7 +660,7 @@ export const recipes: Recipe[] = [
       ]
     },
     instructions: "1. Preheat oven to 375°F\n2. Mix turkey, egg, breadcrumbs, and seasonings\n3. Form into 1-1.5 inch balls\n4. Bake for 20-25 minutes until golden\n5. Serve over pasta or rice with optional garnishes",
-    image: "turkey-meatballs.jpg"
+    image: "/images/7.png"
   },
   {
     id: 8,
@@ -730,7 +730,7 @@ export const recipes: Recipe[] = [
       ]
     },
     instructions: "1. Mix oats, milk, and chia seeds in a jar\n2. Add maple syrup and cinnamon\n3. Refrigerate overnight (4-6 hours minimum)\n4. Top with blueberries and serve",
-    image: "overnight-oats.jpg"
+    image: "/images/8.png"
   },
   {
     id: 9,
@@ -804,7 +804,7 @@ export const recipes: Recipe[] = [
       ]
     },
     instructions: "1. Roast squash and carrots at 400°F for 25-30 minutes\n2. Blend with vegetable broth until smooth\n3. Add ginger and salt, bring to simmer\n4. Simmer for 10 minutes and serve warm",
-    image: "butternut-soup.jpg"
+    image: "/images/9.png"
   },
   {
     id: 10,
@@ -883,7 +883,7 @@ export const recipes: Recipe[] = [
       ]
     },
     instructions: "1. Mix buckwheat flour, eggs, and milk into a smooth batter\n2. Heat butter in a non-stick pan\n3. Cook thin crepes until golden on both sides\n4. Serve with strawberries and honey",
-    image: "buckwheat-crepes.jpg"
+    image: "/images/10.png"
   },
   {
     id: 11,
@@ -966,7 +966,7 @@ export const recipes: Recipe[] = [
       ]
     },
     instructions: "1. Press and crumble tofu\n2. Cook with turmeric until golden\n3. Add bell peppers and spinach\n4. Stir in nutritional yeast\n5. Cook until heated through\n6. Serve with your favorite sides",
-    image: "tofu-scramble.jpg"
+    image: "/images/11.png"
   },
   {
     id: 12,
@@ -1049,7 +1049,7 @@ export const recipes: Recipe[] = [
       ]
     },
     instructions: "1. Season and cook fish until flaky\n2. Warm corn tortillas\n3. Prep cabbage, avocado, and cilantro\n4. Assemble tacos with fish and toppings\n5. Garnish with lime and cilantro",
-    image: "fish-tacos.jpg"
+    image: "/images/12.png"
   },
   {
     id: 13,
@@ -1124,7 +1124,7 @@ export const recipes: Recipe[] = [
       ]
     },
     instructions: "1. Cook rice until fluffy\n2. Sauté carrots and zucchini until tender\n3. Grill chicken until cooked through\n4. Layer rice, vegetables, and chicken\n5. Season with olive oil and salt",
-    image: "chicken-rice.jpg"
+    image: "/images/13.png"
   },
   {
     id: 14,
@@ -1202,6 +1202,6 @@ export const recipes: Recipe[] = [
       ]
     },
     instructions: "1. Blend avocados until smooth\n2. Add cocoa powder and maple syrup\n3. Mix in vanilla and almond milk (or oat milk for nut-free)\n4. Chill for 2 hours\n5. Top with fresh berries",
-    image: "chocolate-mousse.jpg"
+    image: "/images/14.png"
   }
 ]; 
