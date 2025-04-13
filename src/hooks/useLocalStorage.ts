@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 
 type StorageKey = 'SAVED_RECIPES' | 'SELECTED_TAGS' | 'AVOIDED_INGREDIENTS';
 
-export function useLocalStorage<T>(key: StorageKey, initialValue: T): [T, (value: T) => void] {
+export function useLocalStorage<T>(key: StorageKey, initialValue: T): [T, (value: T | ((prev: T) => T)) => void] {
   // Get from local storage then
   // parse stored json or return initialValue
   const readValue = () => {
@@ -26,7 +26,7 @@ export function useLocalStorage<T>(key: StorageKey, initialValue: T): [T, (value
 
   // Return a wrapped version of useState's setter function that ...
   // ... persists the new value to localStorage.
-  const setValue = (value: T) => {
+  const setValue = (value: T | ((prev: T) => T)) => {
     try {
       // Allow value to be a function so we have same API as useState
       const valueToStore = value instanceof Function ? value(storedValue) : value;

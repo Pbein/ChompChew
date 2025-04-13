@@ -1,14 +1,18 @@
-import { AvoidableIngredient } from '../constants';
 import { INGREDIENT_CLASSIFICATIONS } from '../data/ingredientClassifications';
+
+interface RecipeIngredient {
+  item: string;
+  warning: boolean;
+}
 
 export const checkIngredientAgainstPreferences = (
   ingredient: string,
-  avoidedIngredients: AvoidableIngredient[]
+  avoidedIngredientIds: number[]
 ): boolean => {
   const lowerIngredient = ingredient.toLowerCase();
   
-  return avoidedIngredients.some(category => {
-    const classification = INGREDIENT_CLASSIFICATIONS.find(c => c.category === category);
+  return avoidedIngredientIds.some(id => {
+    const classification = INGREDIENT_CLASSIFICATIONS[id];
     if (!classification) return false;
     
     return classification.ingredients.some(avoidedIngredient => 
@@ -18,27 +22,16 @@ export const checkIngredientAgainstPreferences = (
 };
 
 export const getIngredientWarnings = (
-  ingredients: { item: string; warning: boolean }[],
-  avoidedIngredients: AvoidableIngredient[]
-): { item: string; warning: boolean; reason?: string }[] => {
+  ingredients: RecipeIngredient[],
+  avoidedIngredientIds: number[]
+): RecipeIngredient[] => {
   return ingredients.map(ingredient => {
-    const isWarning = checkIngredientAgainstPreferences(ingredient.item, avoidedIngredients);
-    if (!isWarning) return ingredient;
-
-    const matchingCategories = avoidedIngredients.filter(category => {
-      const classification = INGREDIENT_CLASSIFICATIONS.find(c => c.category === category);
-      if (!classification) return false;
-      return classification.ingredients.some(avoidedIngredient => 
-        ingredient.item.toLowerCase().includes(avoidedIngredient.toLowerCase())
-      );
-    });
+    const isWarning = checkIngredientAgainstPreferences(ingredient.item, avoidedIngredientIds);
+    if (!isWarning) return { ...ingredient, warning: false };
 
     return {
       ...ingredient,
-      warning: true,
-      reason: matchingCategories.map(category => 
-        INGREDIENT_CLASSIFICATIONS.find(c => c.category === category)?.name
-      ).join(', ')
+      warning: true
     };
   });
 }; 

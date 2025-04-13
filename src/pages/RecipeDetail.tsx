@@ -1,33 +1,31 @@
 import { useParams } from 'react-router-dom';
-import { recipes } from '../data/recipes';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { getIngredientWarnings } from '../utils/ingredientUtils';
-import { AvoidableIngredient } from '../constants';
+import { recipes } from '../data/recipes';
 
 export const RecipeDetail = () => {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const [savedRecipes, setSavedRecipes] = useLocalStorage<number[]>('SAVED_RECIPES', []);
-  const [avoidedIngredients] = useLocalStorage<AvoidableIngredient[]>('AVOIDED_INGREDIENTS', []);
+  const [avoidedIngredients] = useLocalStorage<number[]>('AVOIDED_INGREDIENTS', []);
   
   const recipe = recipes.find(r => r.id === Number(id));
   
   if (!recipe) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold text-gray-800">Recipe not found</h1>
-      </div>
-    );
+    return <div>Recipe not found</div>;
   }
-
-  const handleSaveRecipe = () => {
-    const newSavedRecipes = savedRecipes.includes(recipe.id)
-      ? savedRecipes.filter(id => id !== recipe.id)
-      : [...savedRecipes, recipe.id];
-    setSavedRecipes(newSavedRecipes);
-  };
-
+  
+  const isSaved = savedRecipes.includes(recipe.id);
   const ingredientsWithWarnings = getIngredientWarnings(recipe.ingredients, avoidedIngredients);
   const hasWarnings = ingredientsWithWarnings.some(ingredient => ingredient.warning);
+  
+  const toggleSaved = () => {
+    setSavedRecipes((prev: number[]) => {
+      const newSavedRecipes = prev.includes(recipe.id) 
+        ? prev.filter(id => id !== recipe.id)
+        : [...prev, recipe.id];
+      return newSavedRecipes;
+    });
+  };
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -61,9 +59,9 @@ export const RecipeDetail = () => {
         <div className="flex justify-between items-start mb-8">
           <h1 className="text-3xl font-bold text-gray-800">{recipe.title}</h1>
           <button
-            onClick={handleSaveRecipe}
+            onClick={toggleSaved}
             className={`p-2 rounded-full ${
-              savedRecipes.includes(recipe.id)
+              isSaved
                 ? 'text-red-500 hover:text-red-600'
                 : 'text-gray-400 hover:text-gray-500'
             }`}
@@ -71,7 +69,7 @@ export const RecipeDetail = () => {
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-6 w-6"
-              fill={savedRecipes.includes(recipe.id) ? 'currentColor' : 'none'}
+              fill={isSaved ? 'currentColor' : 'none'}
               viewBox="0 0 24 24"
               stroke="currentColor"
             >
@@ -124,10 +122,7 @@ export const RecipeDetail = () => {
                         d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
                       />
                     </svg>
-                    <span className="mr-2">{ingredient.item}</span>
-                    <span className="text-sm text-red-500">
-                      (Contains: {ingredient.reason})
-                    </span>
+                    <span>{ingredient.item}</span>
                   </div>
                 )}
                 {!ingredient.warning && ingredient.item}
