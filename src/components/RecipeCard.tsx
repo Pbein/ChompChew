@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Recipe } from '../data/recipes';
-import { useLocalStorage } from '../hooks/useLocalStorage';
-import { getIngredientWarnings } from '../utils/ingredientUtils';
+import { getRecipeImage } from '../utils/recipeImages';
+import { useState } from 'react';
 
 interface RecipeCardProps {
   recipe: Recipe;
@@ -10,89 +10,75 @@ interface RecipeCardProps {
 }
 
 export const RecipeCard = ({ recipe, onSave, isSaved }: RecipeCardProps) => {
-  const [avoidedIngredients] = useLocalStorage<number[]>('AVOIDED_INGREDIENTS', []);
-  const ingredientsWithWarnings = getIngredientWarnings(recipe.ingredients, avoidedIngredients);
-  const hasWarnings = ingredientsWithWarnings.some(ingredient => ingredient.warning);
+  const image = getRecipeImage(recipe.id);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-      <Link to={`/recipe/${recipe.id}`} className="block">
-        <div className="aspect-w-16 aspect-h-9 bg-gray-200">
-          {/* Placeholder for recipe image */}
-          <div className="flex items-center justify-center">
-            <svg
-              className="w-8 h-8 text-gray-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-              />
-            </svg>
+    <div 
+      className="bg-white rounded-xl shadow-sm overflow-hidden transition-transform duration-200 hover:-translate-y-1 hover:shadow-md"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <div className="relative">
+        <Link to={`/recipe/${recipe.id}`} className="block">
+          <div className="aspect-w-16 aspect-h-12 relative">
+            {isLoading && (
+              <div className="absolute inset-0 bg-gray-100 animate-pulse" />
+            )}
+            <img
+              src={image.url}
+              alt={image.alt}
+              className={`w-full h-full object-cover transition-opacity duration-300 ${
+                isLoading ? 'opacity-0' : 'opacity-100'
+              }`}
+              onLoad={() => setIsLoading(false)}
+            />
+            {isHovered && (
+              <div className="absolute inset-0 bg-black/30 transition-all duration-200 flex items-center justify-center">
+                <span className="px-4 py-2 bg-white bg-opacity-90 rounded-full text-sm font-medium text-gray-900">
+                  View Recipe
+                </span>
+              </div>
+            )}
           </div>
-        </div>
-      </Link>
-
-      <div className="p-4">
-        <div className="flex justify-between items-start">
-          <Link to={`/recipe/${recipe.id}`} className="block">
-            <h3 className="text-lg font-medium text-gray-900 line-clamp-2">
-              {recipe.title}
-            </h3>
-          </Link>
+        </Link>
+        {isSaved && (
           <button
             onClick={() => onSave(recipe.id)}
-            className="flex-shrink-0 ml-2"
+            className="absolute top-3 right-3 p-2 rounded-full bg-white bg-opacity-90 shadow-sm hover:bg-opacity-100 transition-all duration-200"
           >
-            <svg
-              className={`w-6 h-6 ${isSaved ? 'text-red-500' : 'text-gray-400'}`}
-              fill={isSaved ? 'currentColor' : 'none'}
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-              />
+            <svg className="w-5 h-5 text-teal-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
             </svg>
           </button>
-        </div>
+        )}
+      </div>
 
-        <div className="mt-2 flex flex-wrap gap-1">
-          {recipe.dietTags.map(tag => (
+      <div className="p-4">
+        <Link to={`/recipe/${recipe.id}`}>
+          <h3 className="text-lg font-medium text-gray-900 mb-2 line-clamp-2 hover:text-teal-700 transition-colors duration-200">
+            {recipe.title}
+          </h3>
+        </Link>
+        <div className="flex flex-wrap gap-2">
+          {recipe.dietTags.map((tag, index) => (
             <span
-              key={tag}
-              className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full"
+              key={index}
+              className="px-3 py-1 bg-teal-50 text-teal-700 text-sm font-medium rounded-full"
             >
               {tag}
             </span>
           ))}
-        </div>
-
-        {hasWarnings && (
-          <div className="mt-2 flex items-center text-red-500 text-sm">
-            <svg
-              className="w-4 h-4 mr-1"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+          {!isSaved && (
+            <button
+              onClick={() => onSave(recipe.id)}
+              className="px-3 py-1 bg-gray-50 text-gray-600 text-sm font-medium rounded-full hover:bg-gray-100 transition-colors duration-200"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-              />
-            </svg>
-            Contains ingredients to avoid
-          </div>
-        )}
+              + Save
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

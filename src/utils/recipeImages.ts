@@ -1,90 +1,74 @@
 interface RecipeImage {
   url: string;
   alt: string;
-  source: 'unsplash' | 'pexels';
-  photographer: string;
-  photographerUrl: string;
 }
 
-export const recipeImages: Record<string, RecipeImage> = {
-  "Zucchini Noodles with Avocado Pesto": {
-    url: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd",
-    alt: "Zucchini noodles with avocado pesto in a white bowl",
-    source: "unsplash",
-    photographer: "Brooke Lark",
-    photographerUrl: "https://unsplash.com/@brookelark"
+// Import all images
+const recipeImages: { [key: number]: RecipeImage } = {
+  1: {
+    url: '/src/assets/Images for ChompChew Recipes/1.png',
+    alt: 'Zucchini Noodles with Avocado Pesto'
   },
-  "Quinoa Buddha Bowl": {
-    url: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c",
-    alt: "Colorful quinoa buddha bowl with vegetables",
-    source: "unsplash",
-    photographer: "Eiliv-Sonas Aceron",
-    photographerUrl: "https://unsplash.com/@shootdelicious"
+  2: {
+    url: '/src/assets/Images for ChompChew Recipes/2.png',
+    alt: 'Quinoa Buddha Bowl'
   },
-  "Low-FODMAP Chicken Stir Fry": {
-    url: "https://images.pexels.com/photos/1640774/pexels-photo-1640774.jpeg",
-    alt: "Healthy chicken stir fry with vegetables",
-    source: "pexels",
-    photographer: "Ella Olsson",
-    photographerUrl: "https://www.pexels.com/@ella-olsson"
+  3: {
+    url: '/src/assets/Images for ChompChew Recipes/3.png',
+    alt: 'Low-FODMAP Chicken Stir Fry'
   },
-  "Vegan Chocolate Avocado Mousse": {
-    url: "https://images.unsplash.com/photo-1563805042-7684c019e1cb",
-    alt: "Chocolate avocado mousse in a glass",
-    source: "unsplash",
-    photographer: "Mgg Vitchakorn",
-    photographerUrl: "https://unsplash.com/@mggbox"
+  4: {
+    url: '/src/assets/Images for ChompChew Recipes/4.png',
+    alt: 'UC-Friendly Salmon with Mashed Potatoes'
   },
-  "Gluten-Free Banana Pancakes": {
-    url: "https://images.pexels.com/photos/376464/pexels-photo-376464.jpeg",
-    alt: "Stack of banana pancakes with syrup",
-    source: "pexels",
-    photographer: "Ash",
-    photographerUrl: "https://www.pexels.com/@ash-376540"
+  5: {
+    url: '/src/assets/Images for ChompChew Recipes/5.png',
+    alt: 'Vegan Lentil Curry'
   },
-  "Mediterranean Quinoa Salad": {
-    url: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe",
-    alt: "Mediterranean quinoa salad with vegetables",
-    source: "unsplash",
-    photographer: "Eiliv-Sonas Aceron",
-    photographerUrl: "https://unsplash.com/@shootdelicious"
+  6: {
+    url: '/src/assets/Images for ChompChew Recipes/6.png',
+    alt: 'Gluten-Free Banana Pancakes'
   },
-  "Vegan Lentil Curry": {
-    url: "https://images.pexels.com/photos/2474661/pexels-photo-2474661.jpeg",
-    alt: "Vegan lentil curry in a bowl",
-    source: "pexels",
-    photographer: "Polina Tankilevitch",
-    photographerUrl: "https://www.pexels.com/@polina-tankilevitch"
+  7: {
+    url: '/src/assets/Images for ChompChew Recipes/7.png',
+    alt: 'Low-FODMAP Turkey Meatballs'
   },
-  "Low-Carb Cauliflower Pizza": {
-    url: "https://images.unsplash.com/photo-1513104890138-7c749659a591",
-    alt: "Cauliflower crust pizza with toppings",
-    source: "unsplash",
-    photographer: "Ivan Torres",
-    photographerUrl: "https://unsplash.com/@iavnt"
+  8: {
+    url: '/src/assets/Images for ChompChew Recipes/8.png',
+    alt: 'Low-FODMAP Overnight Oats'
   },
-  "Vegan Mushroom Risotto": {
-    url: "https://images.pexels.com/photos/1251208/pexels-photo-1251208.jpeg",
-    alt: "Creamy mushroom risotto in a bowl",
-    source: "pexels",
-    photographer: "Marta Dzedyshko",
-    photographerUrl: "https://www.pexels.com/@marta-dzedyshko-104378"
+  9: {
+    url: '/src/assets/Images for ChompChew Recipes/9.png',
+    alt: 'UC-Friendly Butternut Squash Soup'
   },
-  "Gluten-Free Chocolate Chip Cookies": {
-    url: "https://images.unsplash.com/photo-1558964122-9fdfb16d0c0a",
-    alt: "Freshly baked chocolate chip cookies",
-    source: "unsplash",
-    photographer: "Mgg Vitchakorn",
-    photographerUrl: "https://unsplash.com/@mggbox"
+  10: {
+    url: '/src/assets/Images for ChompChew Recipes/10.png',
+    alt: 'Gluten-Free Buckwheat Crepes'
+  },
+  11: {
+    url: '/src/assets/Images for ChompChew Recipes/11.png',
+    alt: 'Vegan Tofu Scramble'
+  },
+  12: {
+    url: '/src/assets/Images for ChompChew Recipes/12.png',
+    alt: 'Low-FODMAP Fish Tacos'
+  },
+  13: {
+    url: '/src/assets/Images for ChompChew Recipes/13.png',
+    alt: 'UC-Friendly Chicken and Rice'
+  },
+  14: {
+    url: '/src/assets/Images for ChompChew Recipes/14.png',
+    alt: 'Vegan Chocolate Avocado Mousse'
   }
 };
 
-export const getRecipeImage = (recipeTitle: string): RecipeImage => {
-  return recipeImages[recipeTitle] || {
-    url: "https://images.unsplash.com/photo-1546069901-d5bfd2cbfb1f",
-    alt: "Default recipe image",
-    source: "unsplash",
-    photographer: "Eiliv-Sonas Aceron",
-    photographerUrl: "https://unsplash.com/@shootdelicious"
-  };
+// Default image for recipes without a matching image
+const DEFAULT_IMAGE: RecipeImage = {
+  url: '/src/assets/Images for ChompChew Recipes/default.png',
+  alt: 'Default recipe image'
+};
+
+export const getRecipeImage = (recipeId: number): RecipeImage => {
+  return recipeImages[recipeId] || DEFAULT_IMAGE;
 }; 
