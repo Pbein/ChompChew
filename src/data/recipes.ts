@@ -83,8 +83,8 @@ export const recipes: Recipe[] = [
       { item: "Coconut Milk", warning: false },
       { item: "Curry Powder", warning: false },
       { item: "Spinach", warning: false },
-      { item: "Onion", warning: true },
-      { item: "Garlic", warning: true },
+      { item: "Onion", warning: false },
+      { item: "Garlic", warning: false },
       { item: "Rice", warning: false }
     ],
     instructions: "1. Cook lentils until tender\n2. Sauté onion and garlic (optional)\n3. Add curry powder and coconut milk\n4. Simmer until thickened\n5. Add spinach and cook until wilted\n6. Serve over rice",

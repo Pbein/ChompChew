@@ -1,10 +1,13 @@
 import { useParams } from 'react-router-dom';
 import { recipes } from '../data/recipes';
 import { useLocalStorage } from '../hooks/useLocalStorage';
+import { getIngredientWarnings } from '../utils/ingredientUtils';
+import { AvoidableIngredient } from '../constants';
 
 export const RecipeDetail = () => {
   const { id } = useParams();
   const [savedRecipes, setSavedRecipes] = useLocalStorage<number[]>('SAVED_RECIPES', []);
+  const [avoidedIngredients] = useLocalStorage<AvoidableIngredient[]>('AVOIDED_INGREDIENTS', []);
   
   const recipe = recipes.find(r => r.id === Number(id));
   
@@ -17,16 +20,44 @@ export const RecipeDetail = () => {
   }
 
   const handleSaveRecipe = () => {
-    setSavedRecipes(prev => 
-      prev.includes(recipe.id)
-        ? prev.filter(id => id !== recipe.id)
-        : [...prev, recipe.id]
-    );
+    const newSavedRecipes = savedRecipes.includes(recipe.id)
+      ? savedRecipes.filter(id => id !== recipe.id)
+      : [...savedRecipes, recipe.id];
+    setSavedRecipes(newSavedRecipes);
   };
+
+  const ingredientsWithWarnings = getIngredientWarnings(recipe.ingredients, avoidedIngredients);
+  const hasWarnings = ingredientsWithWarnings.some(ingredient => ingredient.warning);
 
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-3xl mx-auto">
+        {hasWarnings && (
+          <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-8">
+            <div className="flex items-start">
+              <svg
+                className="w-6 h-6 text-red-500 mr-3 flex-shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                />
+              </svg>
+              <div>
+                <h3 className="text-lg font-semibold text-red-800">Warning: Contains Ingredients You're Avoiding</h3>
+                <p className="text-red-600 mt-1">
+                  This recipe contains ingredients that match your dietary preferences. Please review the ingredients list below.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="flex justify-between items-start mb-8">
           <h1 className="text-3xl font-bold text-gray-800">{recipe.title}</h1>
           <button
@@ -71,7 +102,7 @@ export const RecipeDetail = () => {
         <div className="mb-8">
           <h2 className="text-xl font-semibold text-gray-800 mb-4">Ingredients</h2>
           <ul className="space-y-2">
-            {recipe.ingredients.map((ingredient, index) => (
+            {ingredientsWithWarnings.map((ingredient, index) => (
               <li
                 key={index}
                 className={`flex items-center ${
@@ -79,21 +110,27 @@ export const RecipeDetail = () => {
                 }`}
               >
                 {ingredient.warning && (
-                  <svg
-                    className="w-5 h-5 mr-2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-                    />
-                  </svg>
+                  <div className="flex items-center">
+                    <svg
+                      className="w-5 h-5 mr-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                      />
+                    </svg>
+                    <span className="mr-2">{ingredient.item}</span>
+                    <span className="text-sm text-red-500">
+                      (Contains: {ingredient.reason})
+                    </span>
+                  </div>
                 )}
-                {ingredient.item}
+                {!ingredient.warning && ingredient.item}
               </li>
             ))}
           </ul>
