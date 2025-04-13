@@ -1,80 +1,144 @@
-import { useLocalStorage } from '../hooks/useLocalStorage';
-import { DIET_TAGS } from '../constants';
-import BottomNav from '../components/navigation/BottomNav';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ArrowLeftIcon } from '@heroicons/react/24/outline';
+
+const DIETARY_FLAGS = [
+  'Dairy',
+  'Eggs',
+  'Fish',
+  'Shellfish',
+  'Tree Nuts',
+  'Peanuts',
+  'Wheat',
+  'Soy',
+  'Sesame',
+  'Gluten',
+  'Garlic',
+  'Onion',
+  'Lactose',
+  'FODMAPs',
+  'Nightshades',
+  'Caffeine',
+  'Alcohol',
+  'Processed Sugar',
+  'Artificial Sweeteners',
+  'MSG',
+  'Sulfites',
+  'Histamine',
+  'Oxalates',
+  'Lectins',
+  'Salicylates'
+];
 
 const PreferencesPage = () => {
-  const [selectedDietTags, setSelectedDietTags] = useLocalStorage<string[]>('SELECTED_TAGS', []);
-  const [avoidedIngredients, setAvoidedIngredients] = useLocalStorage<string[]>('AVOIDED_INGREDIENTS', []);
+  const navigate = useNavigate();
+  const [avoidedIngredients, setAvoidedIngredients] = useState<string[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
 
-  const handleDietTagToggle = (tag: string) => {
-    setSelectedDietTags(prev => 
-      prev.includes(tag)
-        ? prev.filter(t => t !== tag)
-        : [...prev, tag]
-    );
+  useEffect(() => {
+    const savedPreferences = localStorage.getItem('avoidedIngredients');
+    if (savedPreferences) {
+      setAvoidedIngredients(JSON.parse(savedPreferences));
+    }
+  }, []);
+
+  const handleSavePreferences = () => {
+    localStorage.setItem('avoidedIngredients', JSON.stringify(avoidedIngredients));
+    navigate('/');
   };
 
+  const toggleIngredient = (ingredient: string) => {
+    setAvoidedIngredients(prev => {
+      if (prev.includes(ingredient)) {
+        return prev.filter(item => item !== ingredient);
+      } else {
+        return [...prev, ingredient];
+      }
+    });
+  };
+
+  const filteredFlags = DIETARY_FLAGS.filter(flag =>
+    flag.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
-    <div className="min-h-screen bg-white pb-16">
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        <h1 className="text-2xl font-bold text-gray-900 mb-6">Dietary Preferences</h1>
-        
-        <div className="mb-8">
-          <h2 className="text-lg font-semibold text-gray-800 mb-4">Dietary Restrictions</h2>
-          <div className="flex flex-wrap gap-2">
-            {DIET_TAGS.map((tag) => (
-              <button
-                key={tag}
-                onClick={() => handleDietTagToggle(tag)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                  selectedDietTags.includes(tag)
-                    ? 'bg-teal-100 text-teal-800 border border-teal-200'
-                    : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
-                }`}
-              >
-                {tag}
-              </button>
-            ))}
-          </div>
+    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-3xl mx-auto">
+        <div className="flex items-center justify-between mb-8">
+          <button
+            onClick={() => navigate('/')}
+            className="flex items-center text-gray-600 hover:text-gray-900"
+          >
+            <ArrowLeftIcon className="h-5 w-5 mr-2" />
+            Back to Recipes
+          </button>
+          <button
+            onClick={handleSavePreferences}
+            className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors duration-200"
+          >
+            Save Preferences
+          </button>
         </div>
 
-        <div className="mb-8">
-          <h2 className="text-lg font-semibold text-gray-800 mb-4">Ingredient Warnings</h2>
-          <p className="text-gray-600 mb-4">
-            Recipes containing these ingredients will be flagged with a warning icon.
-          </p>
+        <div className="bg-white rounded-xl shadow-sm p-6">
+          <h1 className="text-2xl font-bold text-gray-900 mb-6">Dietary Preferences</h1>
+          
+          <div className="mb-6">
+            <label htmlFor="search" className="block text-sm font-medium text-gray-700 mb-2">
+              Search Dietary Flags
+            </label>
+            <input
+              type="text"
+              id="search"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search for ingredients to avoid..."
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+            />
+          </div>
+
           <div className="space-y-4">
-            {['Nuts', 'Dairy', 'Gluten', 'Soy'].map((ingredient) => (
-              <div key={ingredient} className="flex items-center">
-                <input
-                  type="checkbox"
-                  id={ingredient.toLowerCase()}
-                  checked={avoidedIngredients.includes(ingredient.toLowerCase())}
-                  onChange={() => {
-                    setAvoidedIngredients(prev => 
-                      prev.includes(ingredient.toLowerCase())
-                        ? prev.filter(i => i !== ingredient.toLowerCase())
-                        : [...prev, ingredient.toLowerCase()]
-                    );
-                  }}
-                  className="h-4 w-4 text-teal-600 focus:ring-teal-500 border-gray-300 rounded"
-                />
-                <label htmlFor={ingredient.toLowerCase()} className="ml-2 block text-sm text-gray-700">
-                  {ingredient}
-                </label>
-              </div>
-            ))}
+            <h2 className="text-lg font-medium text-gray-900">Select ingredients to avoid:</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+              {filteredFlags.map((flag) => (
+                <button
+                  key={flag}
+                  onClick={() => toggleIngredient(flag)}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${
+                    avoidedIngredients.includes(flag)
+                      ? 'bg-teal-100 text-teal-800 border-2 border-teal-500'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border-2 border-transparent'
+                  }`}
+                >
+                  {flag}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
 
-        <div className="bg-teal-50 p-4 rounded-lg">
-          <h3 className="text-teal-800 font-medium mb-2">How this works</h3>
-          <p className="text-teal-700 text-sm">
-            When you select dietary restrictions and ingredient warnings, recipes that don't match your preferences will be flagged with a warning icon. This helps you quickly identify recipes that might not be suitable for your dietary needs.
-          </p>
+          {avoidedIngredients.length > 0 && (
+            <div className="mt-8">
+              <h2 className="text-lg font-medium text-gray-900 mb-3">Currently Avoiding:</h2>
+              <div className="flex flex-wrap gap-2">
+                {avoidedIngredients.map((ingredient) => (
+                  <span
+                    key={ingredient}
+                    className="px-3 py-1 bg-teal-100 text-teal-800 rounded-full text-sm font-medium flex items-center gap-1"
+                  >
+                    {ingredient}
+                    <button
+                      onClick={() => toggleIngredient(ingredient)}
+                      className="ml-1 text-teal-600 hover:text-teal-800"
+                    >
+                      ×
+                    </button>
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
-      <BottomNav />
     </div>
   );
 };

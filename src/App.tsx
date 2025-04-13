@@ -1,7 +1,6 @@
-import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { lazy, Suspense } from 'react';
 import ErrorBoundary from './components/common/ErrorBoundary';
-import LoadingSpinner from './components/common/LoadingSpinner';
 import BottomNav from './components/navigation/BottomNav';
 import { DesktopNav } from './components/navigation/DesktopNav';
 
@@ -15,10 +14,10 @@ const App: React.FC = () => {
   return (
     <Router>
       <ErrorBoundary>
-        <div className="flex flex-col min-h-screen">
+        <div className="min-h-screen bg-white">
           <DesktopNav />
-          <main className="flex-grow">
-            <Suspense fallback={<LoadingSpinner className="min-h-screen" />}>
+          <main className="pb-16">
+            <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
               <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/recipe/:id" element={<RecipeDetailPage />} />
