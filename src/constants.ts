@@ -1,17 +1,17 @@
-export const DIET_TAGS = [
+export type DietTag = 'vegan' | 'vegetarian' | 'gluten-free' | 'dairy-free' | 'nut-free' | 'soy-free' | 'low-carb' | 'paleo' | 'low-fodmap' | 'ulcerative-colitis-friendly';
+
+export const DIET_TAGS: DietTag[] = [
   'vegan',
   'vegetarian',
   'gluten-free',
   'dairy-free',
   'nut-free',
   'soy-free',
-  'low-fodmap',
-  'ulcerative-colitis-friendly',
+  'low-carb',
   'paleo',
-  'low-carb'
-] as const;
-
-export type DietTag = typeof DIET_TAGS[number];
+  'low-fodmap',
+  'ulcerative-colitis-friendly'
+];
 
 export const WARNING_INGREDIENTS = [
   'onion',
@@ -27,4 +27,19 @@ export type WarningIngredient = typeof WARNING_INGREDIENTS[number];
 export const STORAGE_KEYS = {
   SAVED_RECIPES: 'savedRecipes',
   SELECTED_TAGS: 'selectedTags'
-} as const; 
+} as const;
+
+export type AvoidableIngredient = 'garlic' | 'onion' | 'dairy' | 'shellfish' | 'meat' | 'gluten' | 'nuts' | 'soy' | 'eggs' | 'fish';
+
+export const AVOIDABLE_INGREDIENTS: AvoidableIngredient[] = [
+  'garlic',
+  'onion',
+  'dairy',
+  'shellfish',
+  'meat',
+  'gluten',
+  'nuts',
+  'soy',
+  'eggs',
+  'fish'
+]; 
