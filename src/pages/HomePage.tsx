@@ -10,7 +10,7 @@ const HomePage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDietTags, setSelectedDietTags] = useState<string[]>([]);
   const [savedRecipes, setSavedRecipes] = useLocalStorage<number[]>('SAVED_RECIPES', []);
-  const [avoidedIngredients] = useLocalStorage<number[]>('AVOIDED_INGREDIENTS', []);
+  const [avoidedIngredients] = useLocalStorage<string[]>('AVOIDED_INGREDIENTS', []);
   const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -24,17 +24,22 @@ const HomePage = () => {
   }, []);
 
   useEffect(() => {
-    const filtered = recipes.filter((recipe: Recipe) => {
-      const matchesSearch = recipe.title.toLowerCase().includes(searchQuery.toLowerCase());
+    const filtered = recipes.filter(recipe => {
+      // Check if recipe matches search query
+      const matchesSearch = searchQuery === '' || 
+        recipe.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        recipe.ingredients.some(ingredient => 
+          ingredient.item.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+
+      // Check if recipe matches selected diet tags
       const matchesDiet = selectedDietTags.length === 0 || 
         selectedDietTags.every(tag => recipe.dietTags.includes(tag));
-      const hasWarnings = recipe.ingredients.some((ingredient: { item: string; warning: boolean }) => 
-        ingredient.warning
-      );
-      return matchesSearch && matchesDiet && !hasWarnings;
+
+      return matchesSearch && matchesDiet;
     });
     setFilteredRecipes(filtered);
-  }, [searchQuery, selectedDietTags, avoidedIngredients]);
+  }, [recipes, searchQuery, selectedDietTags]);
 
   const handleSaveRecipe = (id: number) => {
     setSavedRecipes(prev => {
@@ -101,15 +106,12 @@ const HomePage = () => {
               <button
                 key={tag}
                 onClick={() => handleDietTagToggle(tag)}
-                className={`group px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                   selectedDietTags.includes(tag)
-                    ? 'bg-teal-50 text-teal-700'
-                    : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
+                    ? 'bg-teal-100 text-teal-800 border border-teal-200'
+                    : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
                 }`}
               >
-                {selectedDietTags.includes(tag) && (
-                  <span className="mr-1 text-teal-600">✓</span>
-                )}
                 {tag}
               </button>
             ))}
@@ -117,34 +119,28 @@ const HomePage = () => {
         </div>
 
         {/* Recipe Grid */}
-        {isLoading ? (
-          <div className="columns-1 sm:columns-2 lg:columns-3 gap-8 space-y-8">
-            {[...Array(6)].map((_, index) => (
-              <div key={index} className="break-inside-avoid-column bg-white rounded-xl shadow-sm overflow-hidden animate-pulse">
-                <div className="aspect-w-16 aspect-h-12 bg-gray-200" />
-                <div className="p-4">
-                  <div className="h-4 bg-gray-200 rounded w-3/4 mb-2" />
-                  <div className="flex gap-2">
-                    <div className="h-6 bg-gray-200 rounded-full w-16" />
-                    <div className="h-6 bg-gray-200 rounded-full w-16" />
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="columns-1 sm:columns-2 lg:columns-3 gap-8 space-y-8">
-            {filteredRecipes.map((recipe) => (
-              <div key={recipe.id} className="break-inside-avoid-column mb-8">
-                <RecipeCard
-                  recipe={recipe}
-                  onSave={handleSaveRecipe}
-                  isSaved={savedRecipes.includes(recipe.id)}
-                />
-              </div>
-            ))}
-          </div>
-        )}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {isLoading ? (
+            <div className="col-span-full text-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-500 mx-auto"></div>
+              <p className="mt-4 text-gray-600">Loading recipes...</p>
+            </div>
+          ) : filteredRecipes.length > 0 ? (
+            filteredRecipes.map((recipe) => (
+              <RecipeCard
+                key={recipe.id}
+                recipe={recipe}
+                isSaved={savedRecipes.includes(recipe.id)}
+                onSaveToggle={() => handleSaveRecipe(recipe.id)}
+                avoidedIngredients={avoidedIngredients}
+              />
+            ))
+          ) : (
+            <div className="col-span-full text-center py-12">
+              <p className="text-gray-600">No recipes found matching your criteria.</p>
+            </div>
+          )}
+        </div>
       </div>
       <BottomNav />
     </div>

@@ -2,17 +2,41 @@ import { Link } from 'react-router-dom';
 import { Recipe } from '../../data/recipes';
 import { getRecipeImage } from '../../utils/recipeImages';
 import { useState } from 'react';
+import { HeartIcon } from '@heroicons/react/24/outline';
+import { HeartIcon as HeartIconSolid } from '@heroicons/react/24/solid';
+import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 
 interface RecipeCardProps {
   recipe: Recipe;
-  onSave: (id: number) => void;
   isSaved: boolean;
+  onSaveToggle: () => void;
+  avoidedIngredients: string[];
 }
 
-export const RecipeCard = ({ recipe, onSave, isSaved }: RecipeCardProps) => {
+export const RecipeCard = ({ recipe, isSaved, onSaveToggle, avoidedIngredients }: RecipeCardProps) => {
   const image = getRecipeImage(recipe.id);
   const [isLoading, setIsLoading] = useState(true);
   const [isHovered, setIsHovered] = useState(false);
+  const [showWarningDetails, setShowWarningDetails] = useState(false);
+
+  const ingredientsWithWarnings = recipe.ingredients.filter(ingredient => 
+    avoidedIngredients.some(avoided => {
+      const ingredientName = ingredient.item?.toLowerCase() || '';
+      const avoidedName = String(avoided).toLowerCase();
+      
+      // Skip if the ingredient is explicitly marked as safe (e.g., "gluten-free")
+      if (ingredientName.includes(`${avoidedName}-free`) || 
+          ingredientName.includes(`free of ${avoidedName}`) ||
+          ingredientName.includes(`no ${avoidedName}`)) {
+        return false;
+      }
+      
+      // Check if the ingredient contains the avoided item
+      return ingredientName.includes(avoidedName);
+    })
+  );
+
+  const hasWarnings = ingredientsWithWarnings.length > 0;
 
   return (
     <div 
@@ -41,16 +65,37 @@ export const RecipeCard = ({ recipe, onSave, isSaved }: RecipeCardProps) => {
                 </span>
               </div>
             )}
+            {hasWarnings && (
+              <div 
+                className="absolute top-2 right-2 bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1 cursor-help"
+                onMouseEnter={() => setShowWarningDetails(true)}
+                onMouseLeave={() => setShowWarningDetails(false)}
+              >
+                <ExclamationTriangleIcon className="w-4 h-4" />
+                <span>⚠️ Contains: {ingredientsWithWarnings.map(ing => ing.item).join(', ')}</span>
+                {showWarningDetails && (
+                  <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-lg shadow-lg p-3 text-left z-10">
+                    <p className="text-sm font-medium text-gray-900 mb-1">Ingredients to avoid:</p>
+                    <ul className="text-sm text-gray-600">
+                      {ingredientsWithWarnings.map((ingredient, index) => (
+                        <li key={index} className="flex items-start gap-1">
+                          <ExclamationTriangleIcon className="w-4 h-4 text-yellow-500 mt-0.5 flex-shrink-0" />
+                          <span>{ingredient.item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </Link>
         {isSaved && (
           <button
-            onClick={() => onSave(recipe.id)}
+            onClick={onSaveToggle}
             className="absolute top-3 right-3 p-2 rounded-full bg-white bg-opacity-90 shadow-sm hover:bg-opacity-100 transition-all duration-200"
           >
-            <svg className="w-5 h-5 text-teal-600" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
-            </svg>
+            <HeartIconSolid className="w-5 h-5 text-red-500" />
           </button>
         )}
       </div>
@@ -72,7 +117,7 @@ export const RecipeCard = ({ recipe, onSave, isSaved }: RecipeCardProps) => {
           ))}
           {!isSaved && (
             <button
-              onClick={() => onSave(recipe.id)}
+              onClick={onSaveToggle}
               className="px-3 py-1 bg-gray-50 text-gray-600 text-sm font-medium rounded-full hover:bg-gray-100 transition-colors duration-200"
             >
               + Save

@@ -9,7 +9,7 @@ import { DesktopNav } from './components/navigation/DesktopNav';
 const HomePage = lazy(() => import('./pages/HomePage'));
 const RecipeDetailPage = lazy(() => import('./pages/RecipeDetailPage'));
 const SavedRecipesPage = lazy(() => import('./pages/SavedRecipesPage'));
-const SettingsPage = lazy(() => import('./pages/SettingsPage'));
+const PreferencesPage = lazy(() => import('./pages/PreferencesPage'));
 
 const App: React.FC = () => {
   return (
@@ -23,7 +23,7 @@ const App: React.FC = () => {
                 <Route path="/" element={<HomePage />} />
                 <Route path="/recipe/:id" element={<RecipeDetailPage />} />
                 <Route path="/saved" element={<SavedRecipesPage />} />
-                <Route path="/settings" element={<SettingsPage />} />
+                <Route path="/preferences" element={<PreferencesPage />} />
               </Routes>
             </Suspense>
           </main>
