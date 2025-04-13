@@ -1,0 +1,66 @@
+{
+  "project": {
+    "name": "Dietary-Friendly Recipe App",
+    "description": "A web app to help users filter and discover recipes based on dietary restrictions and ingredient preferences. Built with real users like John in mind, who navigate complex dietary needs like veganism or ulcerative colitis."
+  },
+  "techStack": {
+    "frontend": ["React", "TypeScript", "TailwindCSS"],
+    "routing": "React Router",
+    "storage": "localStorage for temporary user data (favorites, ingredient blocks)",
+    "data": "Static JSON recipe data for MVP",
+    "build": "Vite",
+    "testing": ["Vitest (planned)"]
+  },
+  "developmentPhilosophy": {
+    "goals": ["Understandable", "Maintainable", "Extendable", "Consistent", "Lean MVP-first"],
+    "principles": [
+      "Use TypeScript strictly in all files.",
+      "Prefer interfaces for data modeling (e.g., Recipe, Ingredient).",
+      "Break UI into small, reusable components (e.g., RecipeCard, TagFilter).",
+      "Favor readability over cleverness.",
+      "Use centralized constants for tag names and dietary categories.",
+      "Avoid silent failures — handle undefined data explicitly.",
+      "Use object-based function parameters for clarity.",
+      "Comment only where clarity is improved (e.g., complex logic or TODOs)."
+    ]
+  },
+  "styling": {
+    "framework": "TailwindCSS",
+    "guidelines": [
+      "Use semantic class structures.",
+      "Follow spacing and layout hierarchy (e.g., consistent use of px, py, gap).",
+      "Avoid inline styles unless for exceptions."
+    ]
+  },
+  "fileStructure": {
+    "components": {
+      "pattern": "PascalCase",
+      "style": "Functional only",
+      "location": "src/components"
+    },
+    "utilityFiles": {
+      "constants": "Centralized in src/constants.ts",
+      "hooks": "Located in src/hooks"
+    },
+    "pages": "Located in src/pages, routed with React Router"
+  },
+  "aiGuidelines": {
+    "taskType": [
+      "Add features like dietary filtering or recipe favoriting",
+      "Fix bugs or edge cases in logic",
+      "Refactor for readability and reuse",
+      "Generate unit tests (Vitest planned)"
+    ],
+    "promptStyle": "Clear, structured prompts with filename references and expectations",
+    "outputExpectations": "Functional, readable, testable code with TypeScript types"
+  },
+  "collaboration": {
+    "updateStrategy": "Iterate and revise .cursorrules as architecture evolves (e.g., adding backend/API)",
+    "consistency": "All contributors must adhere to the rules unless breaking change is justified"
+  },
+  "deployment": {
+    "target": "Vercel",
+    "ci": "GitHub-integrated CI/CD pipeline",
+    "feedback": "In-app and Google Forms for real user testing"
+  }
+}
