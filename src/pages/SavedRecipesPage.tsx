@@ -5,8 +5,9 @@ import BottomNav from '../components/navigation/BottomNav';
 
 const SavedRecipesPage = () => {
   const [savedRecipes, setSavedRecipes] = useLocalStorage<number[]>('SAVED_RECIPES', []);
+  const [avoidedIngredients] = useLocalStorage<string[]>('AVOIDED_INGREDIENTS', []);
 
-  const handleSaveRecipe = (recipeId: number) => {
+  const handleSaveToggle = (recipeId: number) => {
     setSavedRecipes(prev => prev.filter(id => id !== recipeId));
   };
 
@@ -23,13 +24,14 @@ const SavedRecipesPage = () => {
       </div>
 
       <main className="container mx-auto px-4 py-4 pb-20">
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {savedRecipesList.map(recipe => (
             <RecipeCard
               key={recipe.id}
               recipe={recipe}
-              onSave={handleSaveRecipe}
               isSaved={true}
+              onSaveToggle={() => handleSaveToggle(recipe.id)}
+              avoidedIngredients={avoidedIngredients}
             />
           ))}
         </div>

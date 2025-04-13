@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 
 const DIETARY_FLAGS = [
   'Dairy',
@@ -32,18 +33,10 @@ const DIETARY_FLAGS = [
 
 const PreferencesPage = () => {
   const navigate = useNavigate();
-  const [avoidedIngredients, setAvoidedIngredients] = useState<string[]>([]);
+  const [avoidedIngredients, setAvoidedIngredients] = useLocalStorage<string[]>('AVOIDED_INGREDIENTS', []);
   const [searchQuery, setSearchQuery] = useState('');
 
-  useEffect(() => {
-    const savedPreferences = localStorage.getItem('avoidedIngredients');
-    if (savedPreferences) {
-      setAvoidedIngredients(JSON.parse(savedPreferences));
-    }
-  }, []);
-
   const handleSavePreferences = () => {
-    localStorage.setItem('avoidedIngredients', JSON.stringify(avoidedIngredients));
     navigate('/');
   };
 
