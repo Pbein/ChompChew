@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 
-export const BottomNav = () => {
+const BottomNav = () => {
   const location = useLocation();
 
   return (
@@ -74,4 +74,6 @@ export const BottomNav = () => {
       </div>
     </nav>
   );
-}; 
+};
+
+export default BottomNav; 

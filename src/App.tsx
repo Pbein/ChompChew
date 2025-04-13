@@ -1,26 +1,35 @@
+import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { HomePage } from './pages/HomePage';
-import { RecipeDetail } from './pages/RecipeDetail';
-import { SavedRecipes } from './pages/SavedRecipes';
-import { Preferences } from './pages/Preferences';
-import { BottomNav } from './components/BottomNav';
-import { DesktopNav } from './components/DesktopNav';
+import ErrorBoundary from './components/common/ErrorBoundary';
+import LoadingSpinner from './components/common/LoadingSpinner';
+import BottomNav from './components/navigation/BottomNav';
+import { DesktopNav } from './components/navigation/DesktopNav';
 
-const App = () => {
+// Lazy load pages
+const HomePage = lazy(() => import('./pages/HomePage'));
+const RecipeDetailPage = lazy(() => import('./pages/RecipeDetailPage'));
+const SavedRecipesPage = lazy(() => import('./pages/SavedRecipesPage'));
+const SettingsPage = lazy(() => import('./pages/SettingsPage'));
+
+const App: React.FC = () => {
   return (
     <Router>
-      <div className="min-h-screen bg-gray-50">
-        <DesktopNav />
-        <main className="pb-16 md:pb-0">
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/recipe/:id" element={<RecipeDetail />} />
-            <Route path="/saved" element={<SavedRecipes />} />
-            <Route path="/preferences" element={<Preferences />} />
-          </Routes>
-        </main>
-        <BottomNav />
-      </div>
+      <ErrorBoundary>
+        <div className="flex flex-col min-h-screen">
+          <DesktopNav />
+          <main className="flex-grow">
+            <Suspense fallback={<LoadingSpinner className="min-h-screen" />}>
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/recipe/:id" element={<RecipeDetailPage />} />
+                <Route path="/saved" element={<SavedRecipesPage />} />
+                <Route path="/settings" element={<SettingsPage />} />
+              </Routes>
+            </Suspense>
+          </main>
+          <BottomNav />
+        </div>
+      </ErrorBoundary>
     </Router>
   );
 };

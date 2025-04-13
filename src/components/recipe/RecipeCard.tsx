@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
-import { Recipe } from '../data/recipes';
-import { getRecipeImage } from '../utils/recipeImages';
+import { Recipe } from '../../data/recipes';
+import { getRecipeImage } from '../../utils/recipeImages';
 import { useState } from 'react';
 
 interface RecipeCardProps {
@@ -62,7 +62,7 @@ export const RecipeCard = ({ recipe, onSave, isSaved }: RecipeCardProps) => {
           </h3>
         </Link>
         <div className="flex flex-wrap gap-2">
-          {recipe.dietTags.map((tag, index) => (
+          {recipe.dietTags.map((tag: string, index: number) => (
             <span
               key={index}
               className="px-3 py-1 bg-teal-50 text-teal-700 text-sm font-medium rounded-full"

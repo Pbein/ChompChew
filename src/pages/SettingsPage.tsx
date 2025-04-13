@@ -1,8 +1,8 @@
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { INGREDIENT_CLASSIFICATIONS } from '../data/ingredientClassifications';
-import { BottomNav } from '../components/BottomNav';
+import { BottomNav } from '../components/navigation/BottomNav';
 
-export const Preferences = () => {
+const SettingsPage = () => {
   const [avoidedIngredients, setAvoidedIngredients] = useLocalStorage<number[]>('AVOIDED_INGREDIENTS', []);
 
   const toggleIngredient = (index: number) => {
@@ -49,4 +49,6 @@ export const Preferences = () => {
       <BottomNav />
     </div>
   );
-}; 
+};
+
+export default SettingsPage; 

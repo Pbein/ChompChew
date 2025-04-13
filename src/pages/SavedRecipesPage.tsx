@@ -1,9 +1,9 @@
-import { RecipeCard } from '../components/RecipeCard';
+import { RecipeCard } from '../components/recipe/RecipeCard';
 import { recipes } from '../data/recipes';
 import { useLocalStorage } from '../hooks/useLocalStorage';
-import { BottomNav } from '../components/BottomNav';
+import { BottomNav } from '../components/navigation/BottomNav';
 
-export const SavedRecipes = () => {
+const SavedRecipesPage = () => {
   const [savedRecipes, setSavedRecipes] = useLocalStorage<number[]>('SAVED_RECIPES', []);
 
   const handleSaveRecipe = (recipeId: number) => {
@@ -43,4 +43,6 @@ export const SavedRecipes = () => {
       <BottomNav />
     </div>
   );
-}; 
+};
+
+export default SavedRecipesPage; 

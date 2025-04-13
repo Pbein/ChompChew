@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Recipe } from '../data/recipes';
 import { recipes } from '../data/recipes';
-import { RecipeCard } from '../components/RecipeCard';
+import { RecipeCard } from '../components/recipe/RecipeCard';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { DIET_TAGS } from '../constants';
-import { BottomNav } from '../components/BottomNav';
+import BottomNav from '../components/navigation/BottomNav';
 
-export const HomePage = () => {
+const HomePage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDietTags, setSelectedDietTags] = useState<string[]>([]);
   const [savedRecipes, setSavedRecipes] = useLocalStorage<number[]>('SAVED_RECIPES', []);
@@ -149,4 +149,6 @@ export const HomePage = () => {
       <BottomNav />
     </div>
   );
-}; 
+};
+
+export default HomePage; 

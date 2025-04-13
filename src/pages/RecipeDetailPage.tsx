@@ -4,7 +4,7 @@ import { useLocalStorage } from '../hooks/useLocalStorage';
 import { getIngredientWarnings } from '../utils/ingredientUtils';
 import { getRecipeImage } from '../utils/recipeImages';
 
-export const RecipeDetail = () => {
+const RecipeDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const recipe = recipes.find(r => r.id === Number(id));
   const [savedRecipes, setSavedRecipes] = useLocalStorage<number[]>('SAVED_RECIPES', []);
@@ -160,4 +160,6 @@ export const RecipeDetail = () => {
       </div>
     </div>
   );
-}; 
+};
+
+export default RecipeDetailPage; 
