@@ -1,6 +1,6 @@
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { INGREDIENT_CLASSIFICATIONS } from '../data/ingredientClassifications';
-import { BottomNav } from '../components/navigation/BottomNav';
+import BottomNav from '../components/navigation/BottomNav';
 
 const SettingsPage = () => {
   const [avoidedIngredients, setAvoidedIngredients] = useLocalStorage<number[]>('AVOIDED_INGREDIENTS', []);

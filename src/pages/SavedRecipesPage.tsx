@@ -1,7 +1,7 @@
 import { RecipeCard } from '../components/recipe/RecipeCard';
 import { recipes } from '../data/recipes';
 import { useLocalStorage } from '../hooks/useLocalStorage';
-import { BottomNav } from '../components/navigation/BottomNav';
+import BottomNav from '../components/navigation/BottomNav';
 
 const SavedRecipesPage = () => {
   const [savedRecipes, setSavedRecipes] = useLocalStorage<number[]>('SAVED_RECIPES', []);
