@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 
 type StorageKey = 'SAVED_RECIPES' | 'SELECTED_TAGS' | 'AVOIDED_INGREDIENTS';
 
 export function useLocalStorage<T>(key: StorageKey, initialValue: T): [T, (value: T | ((prev: T) => T)) => void] {
   // Get from local storage then
   // parse stored json or return initialValue
-  const readValue = () => {
+  const readValue = useCallback(() => {
     // Prevent build error "window is undefined" but keep working
     if (typeof window === 'undefined') {
       return initialValue;
@@ -18,7 +18,7 @@ export function useLocalStorage<T>(key: StorageKey, initialValue: T): [T, (value
       console.warn(`Error reading localStorage key "${key}":`, error);
       return initialValue;
     }
-  };
+  }, [key, initialValue]);
 
   // State to store our value
   // Pass initial state function to useState so logic is only executed once
@@ -40,10 +40,6 @@ export function useLocalStorage<T>(key: StorageKey, initialValue: T): [T, (value
       console.warn(`Error setting localStorage key "${key}":`, error);
     }
   };
-
-  useEffect(() => {
-    setStoredValue(readValue());
-  }, []);
 
   return [storedValue, setValue];
 } 

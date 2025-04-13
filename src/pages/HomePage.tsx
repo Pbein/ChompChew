@@ -39,7 +39,7 @@ const HomePage = () => {
       return matchesSearch && matchesDiet;
     });
     setFilteredRecipes(filtered);
-  }, [recipes, searchQuery, selectedDietTags]);
+  }, [searchQuery, selectedDietTags]);
 
   const handleSaveRecipe = (id: number) => {
     setSavedRecipes(prev => {
